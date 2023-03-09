@@ -1,0 +1,11 @@
+name: SpawnTweaks
+version: '${project.version}'
+main: me.ciel.spawntweaks.SpawnTweaks
+api-version: 1.19
+authors: [Ciel]
+description: Minecraft mob spawn tweaks
+commands:
+  surfacespawn:
+    description: Toggles hostile mob spawning on the overworld surface.
+    permission: bukkit.command.op
+    permission-message: You do not have permission to use this command.
