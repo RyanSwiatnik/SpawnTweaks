@@ -17,7 +17,7 @@ public final class SpawnTweaks extends JavaPlugin implements Listener {
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(this, this);
 
-        System.out.println("[SpawnTweaks] Enabled");
+        System.out.println("Spawn Tweaks enabled");
     }
 
     @Override
@@ -49,8 +49,7 @@ public final class SpawnTweaks extends JavaPlugin implements Listener {
                 type == EntityType.CREEPER ||
                 type == EntityType.SKELETON ||
                 type == EntityType.SPIDER ||
-                type == EntityType.PHANTOM ||
-                type == EntityType.ENDERMAN) {
+                type == EntityType.PHANTOM) {
 
                 if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL &&
                     event.getLocation().getBlock().getLightFromSky() > 0) {
