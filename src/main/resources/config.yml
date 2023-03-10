@@ -1,0 +1,13 @@
+# Spawn Tweaks config file.
+
+# Toggles hostile mob spawning on the overworld surface.
+surface-spawn: false
+
+# Mobs effected when surface spawning is disabled.
+# All CAPS
+surface-spawn-mobs:
+- ZOMBIE
+- CREEPER
+- SKELETON
+- SPIDER
+- PHANTOM

@@ -3,7 +3,7 @@ version: '${project.version}'
 main: me.ciel.spawntweaks.SpawnTweaks
 api-version: 1.19
 authors: [Ciel]
-description: Minecraft mob spawn tweaks
+description: Minecraft mob spawning tweaks
 commands:
   surfacespawn:
     description: Toggles hostile mob spawning on the overworld surface.

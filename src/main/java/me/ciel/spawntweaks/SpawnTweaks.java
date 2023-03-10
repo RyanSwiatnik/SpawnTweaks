@@ -9,12 +9,27 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class SpawnTweaks extends JavaPlugin implements Listener {
-    public boolean surfaceSpawn = false;
+    public boolean surfaceSpawn;
+    public List<EntityType> surfaceSpawnMobs = new ArrayList<EntityType>();
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        // Load config
+        saveDefaultConfig();
+        surfaceSpawn = getConfig().getBoolean("surface-spawn", false);
+
+        for (String entity : getConfig().getStringList("surface-spawn-mobs")) {
+            try {
+                surfaceSpawnMobs.add(EntityType.valueOf(entity));
+            } catch (Exception e) {
+                System.out.println("Error loading mob list, incorrect entity name: " + entity);
+            }
+        }
+
         getServer().getPluginManager().registerEvents(this, this);
 
         System.out.println("Spawn Tweaks enabled");
@@ -31,32 +46,27 @@ public final class SpawnTweaks extends JavaPlugin implements Listener {
         if (command.getName().equalsIgnoreCase("surfacespawn")){
             if (surfaceSpawn){
                 surfaceSpawn = false;
+                getConfig().set("surface-spawn", false);
                 sender.sendMessage("Disabled surface spawning");
             } else {
                 surfaceSpawn = true;
+                getConfig().set("surface-spawn", true);
                 sender.sendMessage("Enabled surface spawning");
             }
+            saveConfig();
         }
         return super.onCommand(sender, command, label, args);
     }
 
     @EventHandler
     public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
-        if (!surfaceSpawn && event.getLocation().getWorld().getEnvironment() == World.Environment.NORMAL){
-            EntityType type = event.getEntityType();
+        if (!surfaceSpawn &&
+            event.getLocation().getWorld().getEnvironment() == World.Environment.NORMAL &&
+            surfaceSpawnMobs.contains(event.getEntityType()) &&
+            event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL &&
+            event.getLocation().getBlock().getLightFromSky() > 0) {
 
-            if (type == EntityType.ZOMBIE ||
-                type == EntityType.CREEPER ||
-                type == EntityType.SKELETON ||
-                type == EntityType.SPIDER ||
-                type == EntityType.PHANTOM) {
-
-                if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL &&
-                    event.getLocation().getBlock().getLightFromSky() > 0) {
-
-                    event.setCancelled(true);
-                }
-            }
+            event.setCancelled(true);
         }
     }
 }
